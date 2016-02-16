@@ -41,7 +41,7 @@ public class Hand implements Comparable<Hand> {
 		return result;
 	}
 
-	public Integer getHandValue() {
+	private Integer getHandValue() {
 		if (isStraight() && isFlush()) {
 			return 8; // Straight Flush (Poker)
 		}

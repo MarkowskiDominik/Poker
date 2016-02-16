@@ -2,6 +2,8 @@ package Poker;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -68,14 +70,18 @@ public class HandTest {
 	}
 	
 	@Test
-	public void testGetHandValueFunction() {
+	public void testGetHandValueFunction() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Assume.assumeTrue(type == Type.GET_VALUE);
 		//given
 		playersHands = parser.parserRound(roundNotation);
-		
+		Method method = Class.forName("Poker.Hand").getDeclaredMethod("getHandValue");
+		method.setAccessible(true);
+        
 		//when
+		Integer result = (Integer) method.invoke(playersHands.get(0));
+		
 		//then
-		assertEquals(expectedHandValue, playersHands.get(0).getHandValue());
+		assertEquals(expectedHandValue, result);
 	}
 	
 	@Test
@@ -83,9 +89,10 @@ public class HandTest {
 		Assume.assumeTrue(type == Type.COMPARE);
 		//given
 		playersHands = parser.parserRound(roundNotation);
-		Integer result = playersHands.get(0).compareTo(playersHands.get(1));
 		
 		//when
+		Integer result = playersHands.get(0).compareTo(playersHands.get(1));
+		
 		//then
 		assertEquals(expectedHandValue, result);
 	}

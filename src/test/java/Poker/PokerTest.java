@@ -23,4 +23,18 @@ public class PokerTest {
 		//then
 		assertFalse(poker.playerOneIsWinner());
 	}
+	
+	@Test
+	public void test2() {
+		//given		
+		//when
+		try {
+			poker = new Poker("src\\test\\resources\\Poker\\test.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		//then
+		assertFalse(poker.playerOneIsWinner());
+	}
 }
