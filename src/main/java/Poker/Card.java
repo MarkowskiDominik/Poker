@@ -3,11 +3,11 @@ package Poker;
 public class Card implements Comparable<Card>{
 
 	Integer rank;
-	String color;
+	String suit;
 
-	public Card(Integer value, String color) {
+	public Card(Integer value, String suit) {
 		this.rank = value;
-		this.color = color;
+		this.suit = suit;
 	}
 
 	@Override
