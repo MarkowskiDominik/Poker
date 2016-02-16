@@ -53,7 +53,17 @@ public class HandTest {
 			{ "KC QC KS QS KH 2D 3D 4D 5D 6D", 6, Type.GET_VALUE }, // Full House
 			{ "KC KS AC KD KH 2D 3D 4D 5D 6D", 7, Type.GET_VALUE }, // Four of a Kind
 			{ "KC QC AC JC TC 2D 3D 4D 5D 6D", 8, Type.GET_VALUE }, // Straight Flush
-			{ "2C 3C 4C 5C 6C 2D 3D 4D 5D 6D", 0, Type.COMPARE }
+			{ "2C 3C 4C 5C 6C 2D 3D 4D 5D 7D", 1, Type.COMPARE },	// Straight Flush VS. Flush
+			{ "2C 2D 4C 4D 6C 2D 3D 4D 5D 7S", 1, Type.COMPARE },	// Two Pairs VS. High Card
+			{ "2C 2D 4C 4D 2S 2D 3D 4D 5D 6S", 1, Type.COMPARE },	// Full House VS. Straight
+			{ "2C 3C 4C 5C 6C 2D 3D 4D 5D 6D", 0, Type.COMPARE },	// Straight Flush VS. Straight Flush
+			{ "2C 3C 4C 5C 7C 2D 3D 4D 5D 7D", 0, Type.COMPARE },	// Flush VS. Flush, the same High Card
+			{ "2C 3C 4C 5C 8C 2D 3D 4D 5D 7D", 1, Type.COMPARE },	// Flush VS. Flush, High Card 8 VS 7
+			{ "2C 3C 4C 5C 7C 2D 3D 4D 5D 8D", -1, Type.COMPARE },	// Flush VS. Flush, High Card 7 VS 8
+			{ "KC KD KS TC TD KC KD KS 9C 9D", 1, Type.COMPARE },	// Full House KT VS. Full House K9
+			{ "KC KD KS 9C 9D KC KD KS TC TD", -1, Type.COMPARE },	// Full House K9 VS. Full House KT
+			{ "KC KD KS TC TD QC QD QS TC TD", 1, Type.COMPARE },	// Full House KT VS. Full House QT
+			{ "QC QD QS TC TD KC KD KS TC TD", -1, Type.COMPARE },	// Full House QT VS. Full House KT
 		});
 	}
 	

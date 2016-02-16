@@ -17,11 +17,11 @@ public class Poker {
 		parser = new Parser();
 	}
 	
-	public void openFileToRead(String fileName) throws FileNotFoundException {
+	private void openFileToRead(String fileName) throws FileNotFoundException {
 		readFile = new Scanner(new File(fileName));
 	}
 	
-	public void closeFile() {
+	private void closeFile() {
 		readFile.close();
 	}
 	
@@ -31,7 +31,6 @@ public class Poker {
 		
 		while (readFile.hasNextLine()) {
 			try {
-				System.out.println("try parser");
 				playersHands = parser.parserRound(readFile.nextLine());
 			} catch (Exception e) {
 				logger.info("invalid structure in file");
@@ -39,6 +38,7 @@ public class Poker {
 			winToLose = winToLose + (playersHands.get(0).compareTo(playersHands.get(1)));
 		}
 		closeFile();
+		logger.info(winToLose.toString());
 		return (winToLose > 0);
 	}
 }

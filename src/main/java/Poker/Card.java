@@ -2,8 +2,8 @@ package Poker;
 
 public class Card implements Comparable<Card>{
 
-	Integer rank;
-	String suit;
+	private Integer rank;
+	private String suit;
 
 	public Card(Integer value, String suit) {
 		this.rank = value;
@@ -37,6 +37,14 @@ public class Card implements Comparable<Card>{
 
 	@Override
 	public int compareTo(Card otherCard) {
-		return otherCard.rank.compareTo(rank);
+		return rank.compareTo(otherCard.rank);
+	}
+
+	public Integer getRank() {
+		return rank;
+	}
+
+	public String getSuit() {
+		return suit;
 	}
 }

@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class Hand implements Comparable<Hand> {
@@ -27,7 +26,7 @@ public class Hand implements Comparable<Hand> {
 		}
 		numberOfOccurrences.put(card, count);
 		listCard.add(new Card(rank, suit));
-		Collections.sort(listCard);
+		Collections.sort(listCard, Collections.reverseOrder());
 	}
 	
 	public Card getCard(Integer index) {
@@ -70,14 +69,14 @@ public class Hand implements Comparable<Hand> {
 		return 0; // High Card
 	}
 
-	public Boolean isStraight() {
-		return (isFiveDifferentCards() && listCard.get(0).rank - listCard.get(4).rank == 4);
+	private Boolean isStraight() {
+		return (isFiveDifferentCards() && listCard.get(0).getRank() - listCard.get(4).getRank() == 4);
 	}
 
-	public Boolean isFlush() {
-		String suit = listCard.get(0).suit;
+	private Boolean isFlush() {
+		String suit = listCard.get(0).getSuit();
 		for (int i = 1; i < listCard.size(); i++) {
-			if (!suit.equals(listCard.get(i).suit)) {
+			if (!suit.equals(listCard.get(i).getSuit())) {
 				return Boolean.FALSE;
 			}
 		}
@@ -106,16 +105,7 @@ public class Hand implements Comparable<Hand> {
 		do {
 			result = listCard.get(index).compareTo(otherHand.getCard(index));
 			index++;
-		} while (result != 0 && index < NUMBER_OF_CARDS );
+		} while (result == 0 && index < NUMBER_OF_CARDS );
 		return result;
-	}
-
-	public void showHand() {
-		for (Entry<Card, Integer> entry : numberOfOccurrences.entrySet()) {
-			//System.out.println(entry.getKey().rank + entry.getKey().suit + "  " + entry.getValue());
-		}
-		for (Card card : listCard) {
-			System.out.println(card.rank + card.suit);
-		}
 	}
 }

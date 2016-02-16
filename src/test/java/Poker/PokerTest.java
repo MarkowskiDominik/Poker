@@ -21,6 +21,6 @@ public class PokerTest {
 		}
 		
 		//then
-		assertTrue(poker.playerOneIsWinner());
+		assertFalse(poker.playerOneIsWinner());
 	}
 }
