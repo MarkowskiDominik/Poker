@@ -45,10 +45,10 @@ public class Hand implements Comparable<Hand> {
 		if (isStraight() && isFlush()) {
 			return 8; // Straight Flush (Poker)
 		}
-		if (isTwoDifferentCards() && numberOfOccurrences.values().contains(Integer.valueOf(4))) {
+		if (isNumberOfDifferentCards(2) && isNumberOfOccurencesCard(4)) {
 			return 7; // Four of a Kind
 		}
-		if (isTwoDifferentCards() && numberOfOccurrences.values().contains(Integer.valueOf(3))) {
+		if (isNumberOfDifferentCards(2) && isNumberOfOccurencesCard(3)) {
 			return 6; // Full House
 		}
 		if (isFlush()) {
@@ -57,20 +57,20 @@ public class Hand implements Comparable<Hand> {
 		if (isStraight()) {
 			return 4; // Straight
 		}
-		if (isThreeDifferentCards() && numberOfOccurrences.values().contains(Integer.valueOf(3))) {
+		if (isNumberOfDifferentCards(3) && isNumberOfOccurencesCard(3)) {
 			return 3; // Three of a Kind
 		}
-		if (isThreeDifferentCards() && numberOfOccurrences.values().contains(Integer.valueOf(2))) {
+		if (isNumberOfDifferentCards(3) && isNumberOfOccurencesCard(2)) {
 			return 2; // Two Pairs
 		}
-		if (isFourDifferentCards()) {
+		if (isNumberOfDifferentCards(4)) {
 			return 1; // One Pair
 		}
 		return 0; // High Card
 	}
 
 	private Boolean isStraight() {
-		return (isFiveDifferentCards() && listCard.get(0).getRank() - listCard.get(4).getRank() == 4);
+		return (isNumberOfDifferentCards(5) && listCard.get(0).getRank() - listCard.get(4).getRank() == 4);
 	}
 
 	private Boolean isFlush() {
@@ -83,20 +83,12 @@ public class Hand implements Comparable<Hand> {
 		return Boolean.TRUE;
 	}
 
-	private Boolean isTwoDifferentCards() {
-		return (numberOfOccurrences.size() == 2);
+	private Boolean isNumberOfDifferentCards(int number) {
+		return (numberOfOccurrences.size() == number);
 	}
-
-	private Boolean isThreeDifferentCards() {
-		return (numberOfOccurrences.size() == 3);
-	}
-
-	private Boolean isFourDifferentCards() {
-		return (numberOfOccurrences.size() == 4);
-	}
-
-	private Boolean isFiveDifferentCards() {
-		return (numberOfOccurrences.size() == 5);
+	
+	private Boolean isNumberOfOccurencesCard(int number) {
+		return (numberOfOccurrences.values().contains(number));
 	}
 
 	private int compareHandsOfTheSameValue(Hand otherHand) {
