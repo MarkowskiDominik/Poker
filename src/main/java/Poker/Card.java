@@ -39,6 +39,11 @@ public class Card implements Comparable<Card>{
 	public int compareTo(Card otherCard) {
 		return rank.compareTo(otherCard.rank);
 	}
+	
+	@Override
+	public String toString() {
+		return rank + suit;
+	}
 
 	public Integer getRank() {
 		return rank;

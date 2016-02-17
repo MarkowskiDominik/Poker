@@ -5,35 +5,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 public class Hand implements Comparable<Hand> {
 
 	private final Integer NUMBER_OF_CARDS = 5;
-	List<Card> listCard;
-	Map<Card, Integer> numberOfOccurrences;
+	private List<Card> cards;
+	private List<Entry<Integer, Integer>> ranksOfCardWithNumberOfOccurrences;
 
 	public Hand() {
-		listCard = new LinkedList<Card>();
-		numberOfOccurrences = new TreeMap<Card, Integer>();
+		cards = new LinkedList<Card>();
 	}
 
 	public void addCard(Integer rank, String suit) {
-		Card card = new Card(rank, suit);
-		Integer count = 1;
-
-		if (numberOfOccurrences.containsKey(card)) {
-			count = numberOfOccurrences.get(card) + 1;
-		}
-		numberOfOccurrences.put(card, count);
-		listCard.add(new Card(rank, suit));
-		Collections.sort(listCard, Collections.reverseOrder());
+		cards.add(new Card(rank, suit));
 	}
-	
-	public Card getCard(Integer index) {
-		return listCard.get(index); 
+
+	private Integer getRankOfCard(Integer index) {
+		return ranksOfCardWithNumberOfOccurrences.get(index).getKey();
 	}
 
 	public int compareTo(Hand otherHand) {
+		prepareHandToCompare();
+		otherHand.prepareHandToCompare();
+
 		int result = getHandValue().compareTo(otherHand.getHandValue());
 		if (result == 0) {
 			result = compareHandsOfTheSameValue(otherHand);
@@ -41,14 +36,35 @@ public class Hand implements Comparable<Hand> {
 		return result;
 	}
 
+	private void prepareHandToCompare() {
+		Collections.sort(cards, Collections.reverseOrder());
+		createRanksOfCardWithNumberOfOccurrences();
+	}
+
+	private void createRanksOfCardWithNumberOfOccurrences() {
+		Map<Integer, Integer> sourceForRanksOfCardWithNumberOfOccurrences = new TreeMap<Integer, Integer>();
+
+		for (Card card : cards) {
+			Integer count = 1;
+			if (sourceForRanksOfCardWithNumberOfOccurrences.containsKey(card.getRank())) {
+				count = sourceForRanksOfCardWithNumberOfOccurrences.get(card.getRank()) + 1;
+			}
+			sourceForRanksOfCardWithNumberOfOccurrences.put(card.getRank(), count);
+		}
+
+		ranksOfCardWithNumberOfOccurrences = new LinkedList<Map.Entry<Integer, Integer>>(
+				sourceForRanksOfCardWithNumberOfOccurrences.entrySet());
+		Collections.sort(ranksOfCardWithNumberOfOccurrences, Collections.reverseOrder(new ComparatorRanksOfCardWithNumberOfOccurrences()));
+	}
+
 	private Integer getHandValue() {
 		if (isStraight() && isFlush()) {
 			return 8; // Straight Flush (Poker)
 		}
-		if (isNumberOfDifferentCards(2) && isNumberOfOccurencesCard(4)) {
+		if (numberOfDifferentCardsIsEqual(2) && numberOfOccurrencesOfTheMostCommonCardIsEqual(4)) {
 			return 7; // Four of a Kind
 		}
-		if (isNumberOfDifferentCards(2) && isNumberOfOccurencesCard(3)) {
+		if (numberOfDifferentCardsIsEqual(2) && numberOfOccurrencesOfTheMostCommonCardIsEqual(3)) {
 			return 6; // Full House
 		}
 		if (isFlush()) {
@@ -57,47 +73,47 @@ public class Hand implements Comparable<Hand> {
 		if (isStraight()) {
 			return 4; // Straight
 		}
-		if (isNumberOfDifferentCards(3) && isNumberOfOccurencesCard(3)) {
+		if (numberOfDifferentCardsIsEqual(3) && numberOfOccurrencesOfTheMostCommonCardIsEqual(3)) {
 			return 3; // Three of a Kind
 		}
-		if (isNumberOfDifferentCards(3) && isNumberOfOccurencesCard(2)) {
+		if (numberOfDifferentCardsIsEqual(3) && numberOfOccurrencesOfTheMostCommonCardIsEqual(2)) {
 			return 2; // Two Pairs
 		}
-		if (isNumberOfDifferentCards(4)) {
+		if (numberOfDifferentCardsIsEqual(4)) {
 			return 1; // One Pair
 		}
 		return 0; // High Card
 	}
 
 	private Boolean isStraight() {
-		return (isNumberOfDifferentCards(5) && listCard.get(0).getRank() - listCard.get(4).getRank() == 4);
+		return (numberOfDifferentCardsIsEqual(5) && cards.get(0).getRank() - cards.get(4).getRank() == 4);
 	}
 
 	private Boolean isFlush() {
-		String suit = listCard.get(0).getSuit();
-		for (int i = 1; i < listCard.size(); i++) {
-			if (!suit.equals(listCard.get(i).getSuit())) {
+		String suit = cards.get(0).getSuit();
+		for (Card card : cards) {
+			if (!card.getSuit().equals(suit)) {
 				return Boolean.FALSE;
 			}
 		}
 		return Boolean.TRUE;
 	}
 
-	private Boolean isNumberOfDifferentCards(int number) {
-		return (numberOfOccurrences.size() == number);
+	private Boolean numberOfDifferentCardsIsEqual(int number) {
+		return (ranksOfCardWithNumberOfOccurrences.size() == number);
 	}
-	
-	private Boolean isNumberOfOccurencesCard(int number) {
-		return (numberOfOccurrences.values().contains(number));
+
+	private Boolean numberOfOccurrencesOfTheMostCommonCardIsEqual(int number) {
+		return ranksOfCardWithNumberOfOccurrences.get(0).getValue().equals(number);
 	}
 
 	private int compareHandsOfTheSameValue(Hand otherHand) {
 		int result = 0;
 		int index = 0;
 		do {
-			result = listCard.get(index).compareTo(otherHand.getCard(index));
+			result = ranksOfCardWithNumberOfOccurrences.get(index).getKey().compareTo(otherHand.getRankOfCard(index));
 			index++;
-		} while (result == 0 && index < NUMBER_OF_CARDS );
+		} while (result == 0 && index < NUMBER_OF_CARDS);
 		return result;
 	}
 }

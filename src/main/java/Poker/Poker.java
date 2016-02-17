@@ -1,44 +1,51 @@
 package Poker;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Poker {
 
-	Scanner readFile;
 	Parser parser;
+	BufferedReader fileReader;
 	Logger logger = Logger.getLogger("Poker");
 	
-	public Poker(String fileName) throws FileNotFoundException {
+	public Poker(String fileName) {
 		openFileToRead(fileName);
 		parser = new Parser();
 	}
 	
-	private void openFileToRead(String fileName) throws FileNotFoundException {
-		readFile = new Scanner(new File(fileName));
+	private void openFileToRead(String fileName) {
+		try {
+			fileReader = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			logger.info("file not found");
+		}
 	}
 	
-	private void closeFile() {
-		readFile.close();
+	private void closeFile() throws IOException {
+		fileReader.close();
 	}
 	
-	public Boolean playerOneIsWinner() {
-		Integer winToLose = 0;
+	public Integer numberOfWinsFirstPlayer() throws IOException {
+		Integer numberOfWin = 0;
 		List<Hand> playersHands = null;
 		
-		while (readFile.hasNextLine()) {
+		while (fileReader.ready()) {
 			try {
-				playersHands = parser.parserRound(readFile.nextLine());
+				playersHands = parser.parserRound(fileReader.readLine());
 			} catch (Exception e) {
 				logger.info("invalid structure in file");
 			}
-			winToLose = winToLose + (playersHands.get(0).compareTo(playersHands.get(1)));
+			if (playersHands.get(0).compareTo(playersHands.get(1)) == 1) {
+				numberOfWin++;
+			}
 		}
 		closeFile();
-		logger.info(winToLose.toString());
-		return (winToLose > 0);
+		logger.info(numberOfWin.toString());
+		return numberOfWin;
 	}
 }

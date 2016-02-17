@@ -70,22 +70,25 @@ public class HandTest {
 	}
 	
 	@Test
-	public void testGetHandValueFunction() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void testFunctionGetHandValue() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Assume.assumeTrue(type == Type.GET_VALUE);
 		//given
 		playersHands = parser.parserRound(roundNotation);
-		Method method = Class.forName("Poker.Hand").getDeclaredMethod("getHandValue");
-		method.setAccessible(true);
+		Method prepareHandToCompare = Class.forName("Poker.Hand").getDeclaredMethod("prepareHandToCompare");
+		Method getHandValue = Class.forName("Poker.Hand").getDeclaredMethod("getHandValue");
+		prepareHandToCompare.setAccessible(true);
+		getHandValue.setAccessible(true);
         
 		//when
-		Integer result = (Integer) method.invoke(playersHands.get(0));
+		prepareHandToCompare.invoke(playersHands.get(0));
+		Integer result = (Integer) getHandValue.invoke(playersHands.get(0));
 		
 		//then
 		assertEquals(expectedHandValue, result);
 	}
 	
 	@Test
-	public void testCompareToFunction() {
+	public void testFunctionCompareTo() {
 		Assume.assumeTrue(type == Type.COMPARE);
 		//given
 		playersHands = parser.parserRound(roundNotation);

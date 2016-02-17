@@ -2,39 +2,42 @@ package Poker;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(Parameterized.class)
 public class PokerTest {
 	
-	Poker poker;
+	private Poker poker;
+	private String filePath;
+	private Integer expected;
 	
-	@Test
-	public void test() {
-		//given		
-		//when
-		try {
-			poker = new Poker("src\\test\\resources\\Poker\\poker.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		//then
-		assertFalse(poker.playerOneIsWinner());
+	public PokerTest(String path, Integer expected) {
+		this.filePath = path;
+		this.expected = expected;
+	}
+	
+	@Parameters
+	public static Collection<Object[]> testedHands() {
+		return Arrays.asList(new Object[][] {
+			{ "src\\test\\resources\\Poker\\poker.txt", 376 },
+			{ "src\\test\\resources\\Poker\\test1.txt", 46 },
+		});
 	}
 	
 	@Test
-	public void test2() {
+	public void playerOneIsWinner() throws IOException {
 		//given		
 		//when
-		try {
-			poker = new Poker("src\\test\\resources\\Poker\\test.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		poker = new Poker(filePath);
 		
 		//then
-		assertFalse(poker.playerOneIsWinner());
+		assertEquals(expected, poker.numberOfWinsFirstPlayer());
 	}
 }
