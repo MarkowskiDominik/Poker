@@ -1,4 +1,4 @@
-package test.java.Poker;
+package Poker;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import main.java.Poker.Poker;
+import Poker.Poker;
 
 @RunWith(Parameterized.class)
 public class PokerTest {
@@ -25,7 +25,7 @@ public class PokerTest {
         this.expected = expected;
     }
 
-    @Parameters // REVIEW dmarkowski - missing file test1.txt
+    @Parameters
     public static Collection<Object[]> testedHands() {
         return Arrays.asList(
                 new Object[][]{ { "src\\test\\resources\\Poker\\poker.txt", 376 }, { "src\\test\\resources\\Poker\\test1.txt", 46 },

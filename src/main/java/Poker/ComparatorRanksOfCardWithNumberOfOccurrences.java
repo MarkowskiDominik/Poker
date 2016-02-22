@@ -1,4 +1,4 @@
-package main.java.Poker;
+package Poker;
 
 import java.util.Comparator;
 import java.util.Map.Entry;

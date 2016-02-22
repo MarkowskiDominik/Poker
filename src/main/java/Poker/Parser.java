@@ -1,55 +1,63 @@
-package main.java.Poker;
+package Poker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
 
-    // REVIEW dmarkowski - why not defined as static?
-    private final String CARD_FORMAT = "[0-9TJQKA][SHCD]";
-    private final Integer NUMBER_OF_CARDS_IN_ROUND = 10;
+	private static final int NUMBER_OF_CARDS_IN_ROUND = 10;
+	private static final int ACE_VALUE = 14;
+	private static final int KING_VALUE = 13;
+	private static final int QUEEN_VALUE = 12;
+	private static final int JACK_VALUE = 11;
+	private static final int TEEN_VALUE = 10;
+	private static final String CARDS_SPLIT = " ";
+	private static final String CARD_FORMAT = "[0-9TJQKA][SHCD]";
 
-    public Parser() {
-    }
+	public Parser() {
+	}
 
-    public List<Hand> parserRound(String roundNotation) {
-        List<Hand> playersHands = new ArrayList<Hand>(2);
-        String[] cardsNotation = roundNotation.split(" ");
+	public List<Hand> parserRound(String roundNotation) throws IllegalArgumentException {
+		List<Hand> playersHands = new ArrayList<Hand>(2);
+		String[] cardsNotation = roundNotation.split(CARDS_SPLIT);
 
-        if (!NUMBER_OF_CARDS_IN_ROUND.equals(cardsNotation.length)) {
-            throw new IllegalArgumentException("incorrect number of cards in the round");
-        }
+		if (cardsNotation.length != NUMBER_OF_CARDS_IN_ROUND) {
+			throw new IllegalArgumentException("incorrect number of cards in the round");
+		}
 
-        playersHands.add(new Hand());
-        playersHands.add(new Hand());
+		playersHands.add(new Hand());
+		playersHands.add(new Hand());
 
-        for (int i = 0; i < NUMBER_OF_CARDS_IN_ROUND; i++) {
-            if (!cardsNotation[i].matches(CARD_FORMAT)) {
-                throw new IllegalArgumentException("invalid card format");
-            }
-            // REVIEW dmarkowski - i / 5 ??? please define clearly what hand is processed
-            playersHands.get(i / 5).addCard(parserCardRank(cardsNotation[i].substring(0, 1)),
-                    cardsNotation[i].substring(1, 2));
-        }
+		for (int numberOfCard = 0; numberOfCard < NUMBER_OF_CARDS_IN_ROUND; numberOfCard++) {
+			if (!cardsNotation[numberOfCard].matches(CARD_FORMAT)) {
+				throw new IllegalArgumentException("invalid card format");
+			}
+			playersHands.get(getNumberOfPlayer(numberOfCard)).addCard(
+					parserCardRank(cardsNotation[numberOfCard].substring(0, 1)),
+					cardsNotation[numberOfCard].substring(1, 2));
+		}
 
-        return playersHands;
-    }
+		return playersHands;
+	}
 
-    // REVIEW dmarkowski - please use contants or an enum for the values
-    private Integer parserCardRank(String cardNotation) {
-        switch (cardNotation.charAt(0)) {
-        case 'T':
-            return 10;
-        case 'J':
-            return 11;
-        case 'Q':
-            return 12;
-        case 'K':
-            return 13;
-        case 'A':
-            return 14;
-        default:
-            return Integer.parseInt(cardNotation);
-        }
-    }
+	private int getNumberOfPlayer(int numberOfCard) {
+		return numberOfCard / 5;
+	}
+
+	private Integer parserCardRank(String cardNotation) {
+		switch (cardNotation.charAt(0)) {
+		case 'T':
+			return TEEN_VALUE;
+		case 'J':
+			return JACK_VALUE;
+		case 'Q':
+			return QUEEN_VALUE;
+		case 'K':
+			return KING_VALUE;
+		case 'A':
+			return ACE_VALUE;
+		default:
+			return Integer.parseInt(cardNotation);
+		}
+	}
 }

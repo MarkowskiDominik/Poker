@@ -1,4 +1,4 @@
-package main.java.Poker;
+package Poker;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -9,7 +9,20 @@ import java.util.TreeMap;
 
 public class Hand implements Comparable<Hand> {
 
-    private final Integer NUMBER_OF_CARDS = 5;
+    private static final int TWO = 2;
+	private static final int THREE = 3;
+	private static final int FOUR = 4;
+	private static final int FIVE = 5;
+	private static final int HIGH_CARD_VALUE = 0;
+	private static final int ONE_PAIR_VALUE = 1;
+	private static final int TWO_PAIRS_VALUE = 2;
+	private static final int THREE_OF_A_KIND_VALUE = 3;
+	private static final int STRAIGHT_VALUE = 4;
+	private static final int FLUSH_VALUE = 5;
+	private static final int FULL_HOUSE_VALUE = 6;
+	private static final int FOUR_OF_A_KINF_VALUE = 7;
+	private static final int STRAIGHT_FLUSH_VALUE = 8;
+	private final Integer NUMBER_OF_CARDS = 5;
     private final List<Card> cards;
     private List<Entry<Integer, Integer>> ranksOfCardWithNumberOfOccurrences;
 
@@ -59,39 +72,41 @@ public class Hand implements Comparable<Hand> {
                 Collections.reverseOrder(new ComparatorRanksOfCardWithNumberOfOccurrences()));
     }
 
-    // REVIEW dmarkowski - please assign constants to the values and other magic numbers from this method
     private Integer getHandValue() {
         if (isStraight() && isFlush()) {
-            return 8; // Straight Flush (Poker)
+            return STRAIGHT_FLUSH_VALUE; // Straight Flush (Poker)
         }
-        if (numberOfDifferentCardsIsEqual(2) && numberOfOccurrencesOfTheMostCommonCardIsEqual(4)) {
-            return 7; // Four of a Kind
+        if (numberOfDifferentCardsIsEqual(TWO) && numberOfOccurrencesOfTheMostCommonCardIsEqual(FOUR)) {
+            return FOUR_OF_A_KINF_VALUE; // Four of a Kind
         }
-        if (numberOfDifferentCardsIsEqual(2) && numberOfOccurrencesOfTheMostCommonCardIsEqual(3)) {
-            return 6; // Full House
+        if (numberOfDifferentCardsIsEqual(TWO) && numberOfOccurrencesOfTheMostCommonCardIsEqual(THREE)) {
+            return FULL_HOUSE_VALUE; // Full House
         }
         if (isFlush()) {
-            return 5; // Flush
+            return FLUSH_VALUE; // Flush
         }
         if (isStraight()) {
-            return 4; // Straight
+            return STRAIGHT_VALUE; // Straight
         }
-        if (numberOfDifferentCardsIsEqual(3) && numberOfOccurrencesOfTheMostCommonCardIsEqual(3)) {
-            return 3; // Three of a Kind
+        if (numberOfDifferentCardsIsEqual(THREE) && numberOfOccurrencesOfTheMostCommonCardIsEqual(THREE)) {
+            return THREE_OF_A_KIND_VALUE; // Three of a Kind
         }
-        if (numberOfDifferentCardsIsEqual(3) && numberOfOccurrencesOfTheMostCommonCardIsEqual(2)) {
-            return 2; // Two Pairs
+        if (numberOfDifferentCardsIsEqual(THREE) && numberOfOccurrencesOfTheMostCommonCardIsEqual(TWO)) {
+            return TWO_PAIRS_VALUE; // Two Pairs
         }
-        if (numberOfDifferentCardsIsEqual(4)) {
-            return 1; // One Pair
+        if (numberOfDifferentCardsIsEqual(FOUR)) {
+            return ONE_PAIR_VALUE; // One Pair
         }
-        return 0; // High Card
+        return HIGH_CARD_VALUE; // High Card
     }
 
     private Boolean isStraight() {
-        // REVIEW dmarkowski - to many ( ) brackets
-        return (numberOfDifferentCardsIsEqual(5) && cards.get(0).getRank() - cards.get(4).getRank() == 4);
+        return numberOfDifferentCardsIsEqual(FIVE) && differenceRankBetweenFirstAndLastCardIsFour();
     }
+
+	private boolean differenceRankBetweenFirstAndLastCardIsFour() {
+		return cards.get(0).getRank() - cards.get(4).getRank() == 4;
+	}
 
     private Boolean isFlush() {
         String suit = cards.get(0).getSuit();
@@ -104,7 +119,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     private Boolean numberOfDifferentCardsIsEqual(int number) {
-        return (ranksOfCardWithNumberOfOccurrences.size() == number);
+        return ranksOfCardWithNumberOfOccurrences.size() == number;
     }
 
     private Boolean numberOfOccurrencesOfTheMostCommonCardIsEqual(int number) {

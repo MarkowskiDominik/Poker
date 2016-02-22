@@ -1,10 +1,10 @@
-package test.java.Poker;
+package Poker;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.Poker.Parser;
+import Poker.Parser;
 
 public class ParserTest {
 

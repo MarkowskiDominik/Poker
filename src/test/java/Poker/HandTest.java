@@ -1,4 +1,4 @@
-package test.java.Poker;
+package Poker;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,10 +16,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import main.java.Poker.Hand;
-import main.java.Poker.Parser;
+import Poker.Hand;
+import Poker.Parser;
 
-// REVIEW dmarkowski - first 9 tests are red
 @RunWith(Parameterized.class)
 public class HandTest {
 
